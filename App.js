@@ -5,8 +5,7 @@ const App = () => {
 
   const [switchState, setSwitchState] = useState(false);
   const [viewArray, setViewArray] = useState([]);
-  const [dynamicIndex, setDynamicIndex] = useState(0);
-  const [scrollViewRef, setScrollViewRef] = useState({});
+  const [scrollViewRef, setScrollViewRef] = useState(null);
 
   const handleSwitchToggle = () => {
     !!switchState ?
@@ -30,18 +29,36 @@ const App = () => {
                 x: viewArray[0],
                 y: 0,
                 animated: true
-              })
-            }}>Home</Text>
+              });
+              }}>Home</Text>
             <Text style={styles.headerText}
               onPress={() => {
                 scrollViewRef.scrollTo({
                 x: viewArray[1],
                 y: 0,
                 animated: true
-              })
-            }}>Products</Text>
-            <Text style={styles.headerText}>Services</Text>
-            <Text style={styles.headerText}>Info</Text>
+              });
+              }}
+              >Products</Text>
+            <Text style={styles.headerText}
+              onPress={() => {
+                scrollViewRef.scrollTo({
+                x: viewArray[2],
+                y: 0,
+                animated: true
+              });
+              }}
+              >Services</Text>
+            <Text style={styles.headerText}
+              onPress={() => {
+                scrollViewRef.scrollTo({
+                x: viewArray[3],
+                y: 0,
+                animated: true
+              });
+              alert(viewArray);
+              }}
+              >Info</Text>
           </View>
         </View>
 
@@ -54,11 +71,11 @@ const App = () => {
           overScrollMode="never"
            >
 
-            <View style={styles.bodyViews}
-              onLayout={event =>{
-                const layout = event.nativeEvent.layout;
-                setViewArray(viewArray[0] = layout.x);
-              }} >
+           <View style={styles.bodyViews}
+             onLayout={event =>{
+               const layout = event.nativeEvent.layout;
+               setViewArray( viewArray => [layout.x, ...viewArray] );
+             }}>
               <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
 
               <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
@@ -68,7 +85,29 @@ const App = () => {
             <View style={styles.bodyViews}
               onLayout={event =>{
                 const layout = event.nativeEvent.layout;
-                setViewArray(viewArray[1] = layout.x);
+                setViewArray( viewArray => [...viewArray, layout.x] );
+              }}>
+              <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
+
+              <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
+              ios_backgroundColor={!!switchState ? "coral" : "cyan"} trackColor={!!switchState ? "coral" : "cyan"} />
+            </View>
+
+            <View style={styles.bodyViews}
+              onLayout={event =>{
+                const layout = event.nativeEvent.layout;
+                setViewArray( viewArray => [...viewArray, layout.x] );
+              }}>
+              <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
+
+              <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
+              ios_backgroundColor={!!switchState ? "coral" : "cyan"} trackColor={!!switchState ? "coral" : "cyan"} />
+            </View>
+
+            <View style={styles.bodyViews}
+              onLayout={event =>{
+                const layout = event.nativeEvent.layout;
+                setViewArray( viewArray => [...viewArray, layout.x] );
               }}>
               <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
 
@@ -109,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   body: {
-    width: 800,
+    width: 1600,
     height: 500
   },
   bodyViews: {
