@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, Switch, Image } from 'react-native';
+import { Text, StyleSheet, View, Switch, Image, ScrollView } from 'react-native';
 
 const App = () => {
 
   const [switchState, setSwitchState] = useState(false);
+  const [viewArray, setViewArray] = useState([]);
+  const [dynamicIndex, setDynamicIndex] = useState(0);
+  const [scrollViewRef, setScrollViewRef] = useState({});
 
   const handleSwitchToggle = () => {
     !!switchState ?
@@ -13,6 +16,7 @@ const App = () => {
 
     return (
       <View style={styles.mainContainer}>
+
         <View style={styles.header}>
           <View style={styles.headerHero}>
             <Text style={styles.headerText}>
@@ -20,21 +24,60 @@ const App = () => {
             </Text>
           </View>
           <View style={styles.nav}>
-            <Text style={styles.headerText}>Home</Text>
-            <Text style={styles.headerText}>Products</Text>
+            <Text style={styles.headerText}
+              onPress={() => {
+                scrollViewRef.scrollTo({
+                x: viewArray[0],
+                y: 0,
+                animated: true
+              })
+            }}>Home</Text>
+            <Text style={styles.headerText}
+              onPress={() => {
+                scrollViewRef.scrollTo({
+                x: viewArray[1],
+                y: 0,
+                animated: true
+              })
+            }}>Products</Text>
             <Text style={styles.headerText}>Services</Text>
             <Text style={styles.headerText}>Info</Text>
           </View>
         </View>
 
-        <View style={styles.body}>
+        <ScrollView contentContainerStyle={styles.body}
+          ref={ref => { setScrollViewRef(ref) }}
+          horizontal={true}
+          decelerationRate={0}
+          snapToAlignment="center"
+          snapToInterval={400}
+          overScrollMode="never"
+           >
 
-          <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
+            <View style={styles.bodyViews}
+              onLayout={event =>{
+                const layout = event.nativeEvent.layout;
+                setViewArray(viewArray[0] = layout.x);
+              }} >
+              <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
 
-          <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
-          ios_backgroundColor={!!switchState ? "coral" : "cyan"} trackColor={!!switchState ? "coral" : "cyan"} />
+              <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
+              ios_backgroundColor={!!switchState ? "coral" : "cyan"} trackColor={!!switchState ? "coral" : "cyan"} />
+            </View>
 
-        </View>
+            <View style={styles.bodyViews}
+              onLayout={event =>{
+                const layout = event.nativeEvent.layout;
+                setViewArray(viewArray[1] = layout.x);
+              }}>
+              <Image style={styles.imageStyle} source={!!switchState ? {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbooksaroundthetable.files.wordpress.com%2F2016%2F11%2Fsurprised-baby.jpg&f=1&nofb=1"} : {uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fposterjackcanada.files.wordpress.com%2F2015%2F01%2Fportrait-photography-surprised-baby.jpg&f=1&nofb=1"}} />
+
+              <Switch style={styles.switchStyle} value={switchState} onValueChange={handleSwitchToggle} thumbColor={!!switchState ? "orange" : "coral"}
+              ios_backgroundColor={!!switchState ? "coral" : "cyan"} trackColor={!!switchState ? "coral" : "cyan"} />
+            </View>
+
+          </ScrollView>
+
       </View>
     );
   }
@@ -66,14 +109,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   body: {
-    flex: 9,
+    width: 800,
+    height: 500
+  },
+  bodyViews: {
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: 400
   },
   switchStyle: {
-    width: 80,
-    height: 30,
+    marginTop: 25
   },
   imageStyle: {
     width: 250,
